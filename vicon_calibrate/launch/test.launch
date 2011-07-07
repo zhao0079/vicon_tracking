@@ -1,0 +1,21 @@
+<launch>
+  <node pkg="vicon"
+        name="vicon"
+        type="vicon"
+        respawn="true"
+        output="screen"/>
+
+  <node pkg="vicon_calibrate"
+        name="vicon_calibrate"
+        type="vicon_calibrate"
+        output="screen">
+    <remap from="~values" to="/vicon/values"/>
+    <remap from="~names" to="/vicon/names"/>
+    <param name="calibration"
+           value="$(find vicon_vsk)/calibration/QuadrotorDelta.xml"/>
+    <param name="vsk"
+           value="$(find vicon_vsk)/vsk/QuadrotorDelta.vsk"/>
+    <param name="reference"
+           value="$(find vicon_vsk)/reference/QuadrotorCalib.xml"/>
+  </node>
+</launch>
