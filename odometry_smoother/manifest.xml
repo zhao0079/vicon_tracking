@@ -1,0 +1,20 @@
+<package>
+  <description brief="odometry_smoother">
+
+     odometry_smoother
+
+  </description>
+  <author>Nathan Michael</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/odometry_smoother</url>
+
+  <depend package="roscpp"/>
+  <depend package="nav_msgs"/>
+  <depend package="armadillo"/>
+  <depend package="tf"/>
+  <depend package="angles"/>
+
+</package>
+
+

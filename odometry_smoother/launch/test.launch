@@ -1,0 +1,86 @@
+<launch>
+  <node pkg="quadrotor_simulator_so3"
+        name="simulator"
+        type="quadrotor_simulator_so3"
+        output="screen">
+    <rosparam file="$(find quadrotor_simulator_so3)/config/hummingbird.yaml"/>
+    <param name="init/z" value="2"/>
+  </node>
+
+  <node pkg="odometry_smoother"
+        name="odometry_smoother"
+        type="odometry_smoother"
+        output="screen">
+    <remap from="~odom_in" to="/simulator/quadrotor/noisy_odom"/>
+    <rosparam file="$(find odometry_smoother)/config/noise.yaml"/>
+  </node>
+
+  <node pkg="so3_control"
+        name="controller"
+        type="so3_control"
+        output="screen">
+    <rosparam file="$(find quadrotor_simulator_so3)/config/hummingbird.yaml"/>
+    <remap from="~cmd_out" to="/simulator/quadrotor/cmd"/>
+    <remap from="~odom" to="/odometry_smoother/odom_out"/>
+    <param name="rate" value="100"/>
+  </node>
+
+  <node pkg="vis_nodes"
+        name="odometry"
+        type="odometry"
+        output="screen">
+    <remap from="~topic" to="/simulator/quadrotor/odom"/>
+    <param name="mailbox" value="odometry"/>
+    <param name="publish_rate" value="10"/>
+  </node>
+
+  <node pkg="vis_nodes"
+        name="odometry_noisy"
+        type="odometry"
+        output="screen">
+    <remap from="~topic" to="/simulator/quadrotor/noisy_odom"/>
+    <param name="mailbox" value="noisy"/>
+    <param name="publish_rate" value="10"/>
+  </node>
+
+  <node pkg="vis_nodes"
+        name="odometry_estimate"
+        type="odometry"
+        output="screen">
+    <remap from="~topic" to="/odometry_smoother/odom_out"/>
+    <param name="mailbox" value="estimate"/>
+    <param name="publish_rate" value="10"/>
+  </node>
+
+  <node pkg="so3_ipc_bridge"
+        name="matlab_command"
+        type="so3_control_Command_subscriber"
+        output="screen">
+    <param name="message" value="cmd"/>
+    <remap from="~topic" to="/controller/cmd_in"/>
+  </node>
+
+  <node pkg="ipc_bridge_ros"
+        name="matlab_odom"
+        type="nav_msgs_Odometry_publisher"
+        output="screen">
+    <param name="message" value="odom"/>
+    <remap from="~topic" to="/simulator/quadrotor/odom"/>
+  </node>
+
+  <node pkg="ipc_bridge_ros"
+        name="matlab_odom_noisy"
+        type="nav_msgs_Odometry_publisher"
+        output="screen">
+    <param name="message" value="noisy_odom"/>
+    <remap from="~topic" to="/simulator/quadrotor/noisy_odom"/>
+  </node>
+
+  <node pkg="ipc_bridge_ros"
+        name="matlab_odom_estimate"
+        type="nav_msgs_Odometry_publisher"
+        output="screen">
+    <param name="message" value="estimate_odom"/>
+    <remap from="~topic" to="/odometry_smoother/odom_out"/>
+  </node>
+</launch>
