@@ -1,0 +1,41 @@
+<launch>
+  <node pkg="vicon"
+        name="vicon"
+        type="vicon"
+        output="screen">
+    <param name="server" value="192.168.1.101"/>
+  </node>
+<!--
+  <group ns="golf">
+    <node pkg="vicon_calibrate"
+          name="vicon_calibrate"
+          type="vicon_calibrate"
+          output="screen"
+          clear_params="true">
+      <remap from="~values" to="/vicon/values"/>
+      <remap from="~names" to="/vicon/names"/>
+      <param name="calibration" 
+             value="$(find vicon_vsk)/calibration/QuadrotorGolf.xml"/>
+    </node>
+
+    <node pkg="vicon2odometry"
+          name="vicon2odometry"
+          type="vicon2odometry"       
+          output="screen">
+      <remap from="~names" to="/vicon/names"/>
+      <remap from="~values" to="/vicon/values"/>
+      <remap from="~pose" to="vicon_calibrate/pose"/>
+      <param name="vsk" value="$(find vicon_vsk)/vsk/QuadrotorGolf.vsk"/>
+    </node>
+
+    <node pkg="vis_nodes"
+          name="odometry"
+          type="odometry"
+          output="screen">
+      <param name="mailbox" value="golf/odometry"/>
+      <remap from="~topic" to="vicon2odometry/odom"/>
+      <param name="publish_rate" value="50"/>
+    </node>
+  </group>
+-->
+</launch>
